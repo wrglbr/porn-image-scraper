@@ -1,0 +1,20 @@
+{
+  "name": "porn-star-scraper",
+  "version": "1.0.0",
+  "description": "Download entire porn-star.com gallery",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "jsdom": "^15.2.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^12.2.4",
+    "@types/node": "^12.12.14"
+  }
+}
