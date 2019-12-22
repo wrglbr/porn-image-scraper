@@ -1,9 +1,13 @@
-porn-image-scraper
+## porn-image-scraper
 
-# Currently supported sites:
+### Currently supported sites:
 
 - porn-star.com
 - babesource.com
+
+### How to
+
+You'll need the node.js runtime (https://nodejs.org/en/)
 
 ```
 npm install
