@@ -36,67 +36,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var pornstar_1 = require("./scrapers/pornstar");
-var babesource_1 = require("./scrapers/babesource");
-var download_1 = require("./download");
-function scrapeLink(url) {
-    return __awaiter(this, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    console.log("Getting " + url + "...");
-                    result = null;
-                    if (!url.includes("porn-star.com")) return [3 /*break*/, 2];
-                    return [4 /*yield*/, new pornstar_1.PornStarScraper().scrape(url)];
-                case 1:
-                    result = _a.sent();
-                    return [3 /*break*/, 5];
-                case 2:
-                    if (!url.includes("babesource.com")) return [3 /*break*/, 4];
-                    return [4 /*yield*/, new babesource_1.BabesourceScraper().scrape(url)];
-                case 3:
-                    result = _a.sent();
-                    return [3 /*break*/, 5];
-                case 4:
-                    console.error("Unsupported site: " + url);
-                    _a.label = 5;
-                case 5:
-                    if (!result) return [3 /*break*/, 7];
-                    return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links)];
-                case 6:
-                    _a.sent();
-                    _a.label = 7;
-                case 7: return [2 /*return*/];
-            }
-        });
-    });
-}
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var urls, _i, urls_1, url;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                urls = process.argv.slice(2);
-                if (!urls.length) {
-                    console.error("(ts-)node . url0 url1 ...");
-                    process.exit(1);
+var dom_1 = require("../dom");
+var PornStarScraper = /** @class */ (function () {
+    function PornStarScraper() {
+    }
+    PornStarScraper.prototype.getImageLinks = function (gallery, dom) {
+        return Array.from(dom_1.qsAll(dom, ".thumbnails-gallery img"))
+            .map(function (el) {
+            return el.getAttribute("src");
+        })
+            .map(function (url) { return "https://porn-star.com/" + gallery + "/" + url.replace("thumbs/", ""); });
+    };
+    PornStarScraper.prototype.scrape = function (url) {
+        return __awaiter(this, void 0, void 0, function () {
+            var urlSegments, gallery, dom, links;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        urlSegments = url.split("/");
+                        gallery = urlSegments[urlSegments.length - 2];
+                        return [4 /*yield*/, dom_1.createDomFromURL(url)];
+                    case 1:
+                        dom = _a.sent();
+                        links = this.getImageLinks(gallery, dom);
+                        return [2 /*return*/, {
+                                gallery: gallery,
+                                links: links
+                            }];
                 }
-                _i = 0, urls_1 = urls;
-                _a.label = 1;
-            case 1:
-                if (!(_i < urls_1.length)) return [3 /*break*/, 4];
-                url = urls_1[_i];
-                return [4 /*yield*/, scrapeLink(url)];
-            case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3:
-                _i++;
-                return [3 /*break*/, 1];
-            case 4:
-                process.exit(0);
-                return [2 /*return*/];
-        }
-    });
-}); })();
+            });
+        });
+    };
+    return PornStarScraper;
+}());
+exports.PornStarScraper = PornStarScraper;
