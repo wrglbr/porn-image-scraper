@@ -4,6 +4,7 @@ import { BabesourceScraper } from "./scrapers/babesource";
 import { downloadImages } from "./download";
 import { TubsexerScraper } from "./scrapers/tubsexer";
 import { CoedcherryScraper } from "./scrapers/coedcherry";
+import { PornpicsScraper } from "./scrapers/pornpics";
 
 async function scrapeLink(url: string) {
   console.log(`Getting ${url}...`);
@@ -17,6 +18,8 @@ async function scrapeLink(url: string) {
     result = await new TubsexerScraper().scrape(url);
   } else if (url.includes("coedcherry.com")) {
     result = await new CoedcherryScraper().scrape(url);
+  } else if (url.includes("pornpics.com")) {
+    result = await new PornpicsScraper().scrape(url);
   } else {
     console.error("Unsupported site: " + url);
   }
