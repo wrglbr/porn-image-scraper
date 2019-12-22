@@ -4,6 +4,8 @@
 
 - porn-star.com
 - babesource.com
+- tubsexer.com
+- coedcherry.com
 
 ### How to
 
