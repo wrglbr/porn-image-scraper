@@ -43,40 +43,6 @@ var path_1 = require("path");
 var baseFolder = "images";
 if (!fs_1.existsSync(baseFolder))
     fs_1.mkdirSync(baseFolder);
-function downloadImage(url, path) {
-    return __awaiter(this, void 0, void 0, function () {
-        var writer, response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    writer = fs_1.createWriteStream(path);
-                    return [4 /*yield*/, axios_1["default"]({
-                            url: url,
-                            method: "GET",
-                            responseType: "stream"
-                        })];
-                case 1:
-                    response = _a.sent();
-                    response.data.pipe(writer);
-                    return [2 /*return*/, new Promise(function (resolve, reject) {
-                            writer.on("finish", resolve);
-                            writer.on("error", reject);
-                        })];
-            }
-        });
-    });
-}
-function qs(dom, query) {
-    return dom.window.document.querySelector(query);
-}
-function qsAll(dom, query) {
-    return dom.window.document.querySelectorAll(query);
-}
-function getImageLinks(dom) {
-    return Array.from(qsAll(dom, ".thumbnails-gallery > a")).map(function (el) {
-        return el.getAttribute("href");
-    });
-}
 function createDomFromURL(url) {
     return __awaiter(this, void 0, void 0, function () {
         var response, html;
@@ -91,20 +57,75 @@ function createDomFromURL(url) {
         });
     });
 }
-function scrapeImagePage(url) {
+var PornStarScraper = /** @class */ (function () {
+    function PornStarScraper() {
+    }
+    PornStarScraper.prototype.getImageLinks = function (gallery, dom) {
+        return Array.from(qsAll(dom, ".thumbnails-gallery img"))
+            .map(function (el) {
+            return el.getAttribute("src");
+        })
+            .map(function (url) { return "https://porn-star.com/" + gallery + "/" + url.replace("thumbs/", ""); });
+    };
+    PornStarScraper.prototype.scrape = function (url) {
+        return __awaiter(this, void 0, void 0, function () {
+            var urlSegments, gallery, dom, links;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        urlSegments = url.split("/");
+                        gallery = urlSegments[urlSegments.length - 2];
+                        return [4 /*yield*/, createDomFromURL(url)];
+                    case 1:
+                        dom = _a.sent();
+                        links = this.getImageLinks(gallery, dom);
+                        return [2 /*return*/, {
+                                gallery: gallery,
+                                links: links
+                            }];
+                }
+            });
+        });
+    };
+    return PornStarScraper;
+}());
+var BabesourceScraper = /** @class */ (function () {
+    function BabesourceScraper() {
+    }
+    BabesourceScraper.prototype.getImageLinks = function (dom) {
+        return Array.from(qsAll(dom, ".thumbs.cf a")).map(function (el) {
+            return el.getAttribute("href");
+        });
+    };
+    BabesourceScraper.prototype.scrape = function (url) {
+        return __awaiter(this, void 0, void 0, function () {
+            var urlSegments, gallery, dom, links;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        urlSegments = url.split("/");
+                        gallery = urlSegments.pop().replace(".html", "");
+                        return [4 /*yield*/, createDomFromURL(url)];
+                    case 1:
+                        dom = _a.sent();
+                        links = this.getImageLinks(dom);
+                        return [2 /*return*/, {
+                                gallery: gallery,
+                                links: links
+                            }];
+                }
+            });
+        });
+    };
+    return BabesourceScraper;
+}());
+function downloadImages(gallery, urls) {
     return __awaiter(this, void 0, void 0, function () {
-        var dom, fullSizeImageSrc, urlSegments, galleryName, galleryFolder, imageUrl, imageFile;
+        var galleryFolder, _i, urls_1, url, path;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log("\tGetting " + url + "...");
-                    return [4 /*yield*/, createDomFromURL(url)];
-                case 1:
-                    dom = _a.sent();
-                    fullSizeImageSrc = qs(dom, ".fullsize-image").getAttribute("src");
-                    urlSegments = url.split("/");
-                    galleryName = urlSegments[urlSegments.length - 2];
-                    galleryFolder = path_1.join(baseFolder, galleryName);
+                    galleryFolder = path_1.join(baseFolder, gallery);
                     if (!fs_1.existsSync(galleryFolder)) {
                         try {
                             fs_1.mkdirSync(galleryFolder);
@@ -114,52 +135,87 @@ function scrapeImagePage(url) {
                             process.exit(1);
                         }
                     }
-                    imageUrl = urlSegments.slice(0, -1).join("/") + "/" + fullSizeImageSrc;
-                    imageFile = path_1.join(galleryFolder, fullSizeImageSrc.replace(".html", ".jpg"));
-                    if (!!fs_1.existsSync(imageFile)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, downloadImage(imageUrl, imageFile)];
+                    _i = 0, urls_1 = urls;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < urls_1.length)) return [3 /*break*/, 4];
+                    url = urls_1[_i];
+                    path = path_1.join(galleryFolder, path_1.basename(url));
+                    return [4 /*yield*/, downloadImage(url, path)];
                 case 2:
                     _a.sent();
-                    return [3 /*break*/, 4];
+                    _a.label = 3;
                 case 3:
-                    console.log("\tImage " + imageFile + " already exists");
-                    _a.label = 4;
+                    _i++;
+                    return [3 /*break*/, 1];
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
+function downloadImage(url, path) {
+    return __awaiter(this, void 0, void 0, function () {
+        var writer, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (fs_1.existsSync(path)) {
+                        console.warn("\t" + url + " already exists, skipping...");
+                        return [2 /*return*/];
+                    }
+                    writer = fs_1.createWriteStream(path);
+                    return [4 /*yield*/, axios_1["default"]({
+                            url: url,
+                            method: "GET",
+                            responseType: "stream"
+                        })];
+                case 1:
+                    response = _a.sent();
+                    console.log("\tDownloading " + url + "...");
+                    response.data.pipe(writer);
+                    return [2 /*return*/, new Promise(function (resolve, reject) {
+                            writer.on("finish", resolve);
+                            writer.on("error", reject);
+                        })];
+            }
+        });
+    });
+}
+function qsAll(dom, query) {
+    return dom.window.document.querySelectorAll(query);
+}
 function scrapeLink(url) {
     return __awaiter(this, void 0, void 0, function () {
-        var dom, imageLinks, _i, imageLinks_1, imageLink, imagePage;
+        var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     console.log("Getting " + url + "...");
-                    return [4 /*yield*/, createDomFromURL(url)];
+                    result = null;
+                    if (!url.includes("porn-star.com")) return [3 /*break*/, 2];
+                    return [4 /*yield*/, new PornStarScraper().scrape(url)];
                 case 1:
-                    dom = _a.sent();
-                    imageLinks = getImageLinks(dom);
-                    _i = 0, imageLinks_1 = imageLinks;
-                    _a.label = 2;
+                    result = _a.sent();
+                    return [3 /*break*/, 4];
                 case 2:
-                    if (!(_i < imageLinks_1.length)) return [3 /*break*/, 5];
-                    imageLink = imageLinks_1[_i];
-                    imagePage = url.replace("index.html", imageLink);
-                    return [4 /*yield*/, scrapeImagePage(imagePage)];
+                    if (!url.includes("babesource.com")) return [3 /*break*/, 4];
+                    return [4 /*yield*/, new BabesourceScraper().scrape(url)];
                 case 3:
-                    _a.sent();
+                    result = _a.sent();
                     _a.label = 4;
                 case 4:
-                    _i++;
-                    return [3 /*break*/, 2];
-                case 5: return [2 /*return*/];
+                    if (!result) return [3 /*break*/, 6];
+                    return [4 /*yield*/, downloadImages(result.gallery, result.links)];
+                case 5:
+                    _a.sent();
+                    _a.label = 6;
+                case 6: return [2 /*return*/];
             }
         });
     });
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var urls, _i, urls_1, url;
+    var urls, _i, urls_2, url;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -168,11 +224,11 @@ function scrapeLink(url) {
                     console.error("ts-node . url0 url1 ...");
                     process.exit(1);
                 }
-                _i = 0, urls_1 = urls;
+                _i = 0, urls_2 = urls;
                 _a.label = 1;
             case 1:
-                if (!(_i < urls_1.length)) return [3 /*break*/, 4];
-                url = urls_1[_i];
+                if (!(_i < urls_2.length)) return [3 /*break*/, 4];
+                url = urls_2[_i];
                 return [4 /*yield*/, scrapeLink(url)];
             case 2:
                 _a.sent();

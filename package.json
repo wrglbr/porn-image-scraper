@@ -1,7 +1,7 @@
 {
-  "name": "porn-star-scraper",
+  "name": "porn-image-scraper",
   "version": "1.0.0",
-  "description": "Download entire porn-star.com gallery",
+  "description": "Download entire porn image galleries",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
