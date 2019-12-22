@@ -1,4 +1,9 @@
-porn-star-scraper
+porn-image-scraper
+
+# Currently supported sites:
+
+- porn-star.com
+- babesource.com
 
 ```
 npm install
