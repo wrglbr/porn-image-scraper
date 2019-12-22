@@ -39,6 +39,8 @@ exports.__esModule = true;
 var pornstar_1 = require("./scrapers/pornstar");
 var babesource_1 = require("./scrapers/babesource");
 var download_1 = require("./download");
+var tubsexer_1 = require("./scrapers/tubsexer");
+var coedcherry_1 = require("./scrapers/coedcherry");
 function scrapeLink(url) {
     return __awaiter(this, void 0, void 0, function () {
         var result;
@@ -51,23 +53,35 @@ function scrapeLink(url) {
                     return [4 /*yield*/, new pornstar_1.PornStarScraper().scrape(url)];
                 case 1:
                     result = _a.sent();
-                    return [3 /*break*/, 5];
+                    return [3 /*break*/, 9];
                 case 2:
                     if (!url.includes("babesource.com")) return [3 /*break*/, 4];
                     return [4 /*yield*/, new babesource_1.BabesourceScraper().scrape(url)];
                 case 3:
                     result = _a.sent();
-                    return [3 /*break*/, 5];
+                    return [3 /*break*/, 9];
                 case 4:
-                    console.error("Unsupported site: " + url);
-                    _a.label = 5;
+                    if (!url.includes("tubsexer.com")) return [3 /*break*/, 6];
+                    return [4 /*yield*/, new tubsexer_1.TubsexerScraper().scrape(url)];
                 case 5:
-                    if (!result) return [3 /*break*/, 7];
-                    return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links)];
+                    result = _a.sent();
+                    return [3 /*break*/, 9];
                 case 6:
+                    if (!url.includes("coedcherry.com")) return [3 /*break*/, 8];
+                    return [4 /*yield*/, new coedcherry_1.CoedcherryScraper().scrape(url)];
+                case 7:
+                    result = _a.sent();
+                    return [3 /*break*/, 9];
+                case 8:
+                    console.error("Unsupported site: " + url);
+                    _a.label = 9;
+                case 9:
+                    if (!result) return [3 /*break*/, 11];
+                    return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
+                case 10:
                     _a.sent();
-                    _a.label = 7;
-                case 7: return [2 /*return*/];
+                    _a.label = 11;
+                case 11: return [2 /*return*/];
             }
         });
     });
