@@ -38,12 +38,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var axios_1 = require("axios");
 var jsdom_1 = require("jsdom");
-function createDomFromURL(url) {
+function createDomFromURL(url, opts) {
+    if (opts === void 0) { opts = {}; }
     return __awaiter(this, void 0, void 0, function () {
         var response, html;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1["default"].get(url)];
+                case 0: return [4 /*yield*/, axios_1["default"].get(url, {
+                        headers: opts.headers || {}
+                    })];
                 case 1:
                     response = _a.sent();
                     html = response.data;

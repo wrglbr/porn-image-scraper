@@ -1,4 +1,4 @@
-import { createWriteStream, mkdirSync, existsSync } from "fs";
+import { createWriteStream, mkdirSync, existsSync, link } from "fs";
 import { join, basename } from "path";
 import Axios from "axios";
 
@@ -19,7 +19,16 @@ export async function downloadImages(gallery: string, urls: string[]) {
 
   for (const url of urls) {
     const path = join(galleryFolder, basename(url));
-    await downloadImage(url, path);
+
+    let linkDone = false;
+    while (!linkDone) {
+      try {
+        await downloadImage(url, path);
+        linkDone = true;
+      } catch (error) {
+        console.error("Error downloading url:", url);
+      }
+    }
   }
 }
 

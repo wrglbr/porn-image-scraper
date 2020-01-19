@@ -44,7 +44,7 @@ if (!fs_1.existsSync(baseFolder))
     fs_1.mkdirSync(baseFolder);
 function downloadImages(gallery, urls) {
     return __awaiter(this, void 0, void 0, function () {
-        var galleryFolder, _i, urls_1, url, path;
+        var galleryFolder, _i, urls_1, url, path, linkDone, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -61,17 +61,30 @@ function downloadImages(gallery, urls) {
                     _i = 0, urls_1 = urls;
                     _a.label = 1;
                 case 1:
-                    if (!(_i < urls_1.length)) return [3 /*break*/, 4];
+                    if (!(_i < urls_1.length)) return [3 /*break*/, 8];
                     url = urls_1[_i];
                     path = path_1.join(galleryFolder, path_1.basename(url));
-                    return [4 /*yield*/, downloadImage(url, path)];
+                    linkDone = false;
+                    _a.label = 2;
                 case 2:
-                    _a.sent();
+                    if (!!linkDone) return [3 /*break*/, 7];
                     _a.label = 3;
                 case 3:
+                    _a.trys.push([3, 5, , 6]);
+                    return [4 /*yield*/, downloadImage(url, path)];
+                case 4:
+                    _a.sent();
+                    linkDone = true;
+                    return [3 /*break*/, 6];
+                case 5:
+                    error_1 = _a.sent();
+                    console.error("Error downloading url:", url);
+                    return [3 /*break*/, 6];
+                case 6: return [3 /*break*/, 2];
+                case 7:
                     _i++;
                     return [3 /*break*/, 1];
-                case 4: return [2 /*return*/];
+                case 8: return [2 /*return*/];
             }
         });
     });

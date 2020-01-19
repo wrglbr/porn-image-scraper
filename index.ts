@@ -6,6 +6,8 @@ import { TubsexerScraper } from "./scrapers/tubsexer";
 import { CoedcherryScraper } from "./scrapers/coedcherry";
 import { PornpicsScraper } from "./scrapers/pornpics";
 
+let dry = false;
+
 async function scrapeLink(url: string) {
   console.log(`Getting ${url}...`);
 
@@ -23,9 +25,12 @@ async function scrapeLink(url: string) {
   } else {
     console.error("Unsupported site: " + url);
   }
-  // console.log(result);
-  if (result)
-    await downloadImages(result.gallery, result.links.filter(Boolean));
+
+  if (result) {
+    if (dry) {
+      console.log(result);
+    } else await downloadImages(result.gallery, result.links.filter(Boolean));
+  }
 }
 
 (async () => {
@@ -37,6 +42,11 @@ async function scrapeLink(url: string) {
   }
 
   for (const url of urls) {
+    if (url == "--dry") {
+      dry = true;
+      continue;
+    }
+
     await scrapeLink(url);
   }
 

@@ -38,9 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var pornstar_1 = require("./scrapers/pornstar");
 var babesource_1 = require("./scrapers/babesource");
+var download_1 = require("./download");
 var tubsexer_1 = require("./scrapers/tubsexer");
 var coedcherry_1 = require("./scrapers/coedcherry");
 var pornpics_1 = require("./scrapers/pornpics");
+var dry = false;
 function scrapeLink(url) {
     return __awaiter(this, void 0, void 0, function () {
         var result;
@@ -82,8 +84,15 @@ function scrapeLink(url) {
                     console.error("Unsupported site: " + url);
                     _a.label = 11;
                 case 11:
+                    if (!result) return [3 /*break*/, 14];
+                    if (!dry) return [3 /*break*/, 12];
                     console.log(result);
-                    return [2 /*return*/];
+                    return [3 /*break*/, 14];
+                case 12: return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
+                case 13:
+                    _a.sent();
+                    _a.label = 14;
+                case 14: return [2 /*return*/];
             }
         });
     });
@@ -103,6 +112,10 @@ function scrapeLink(url) {
             case 1:
                 if (!(_i < urls_1.length)) return [3 /*break*/, 4];
                 url = urls_1[_i];
+                if (url == "--dry") {
+                    dry = true;
+                    return [3 /*break*/, 3];
+                }
                 return [4 /*yield*/, scrapeLink(url)];
             case 2:
                 _a.sent();
