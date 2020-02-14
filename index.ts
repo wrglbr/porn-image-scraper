@@ -5,6 +5,7 @@ import { downloadImages } from "./download";
 import { TubsexerScraper } from "./scrapers/tubsexer";
 import { CoedcherryScraper } from "./scrapers/coedcherry";
 import { PornpicsScraper } from "./scrapers/pornpics";
+import { SweetPornstarsScraper } from "./scrapers/sweet-pornstars";
 
 let dry = false;
 
@@ -22,6 +23,8 @@ async function scrapeLink(url: string) {
     result = await new CoedcherryScraper().scrape(url);
   } else if (url.includes("pornpics.com")) {
     result = await new PornpicsScraper().scrape(url);
+  } else if (url.includes("sweet-pornstars.com")) {
+    result = await new SweetPornstarsScraper().scrape(url);
   } else {
     console.error("Unsupported site: " + url);
   }

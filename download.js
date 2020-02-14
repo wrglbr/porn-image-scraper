@@ -79,6 +79,11 @@ function downloadImages(gallery, urls) {
                 case 5:
                     error_1 = _a.sent();
                     console.error("Error downloading url:", url);
+                    try {
+                        fs_1.unlinkSync(path);
+                    }
+                    catch (err) { }
+                    console.error("Retrying url:", url);
                     return [3 /*break*/, 6];
                 case 6: return [3 /*break*/, 2];
                 case 7:

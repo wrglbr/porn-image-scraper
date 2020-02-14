@@ -1,4 +1,11 @@
-import { createWriteStream, mkdirSync, existsSync, link } from "fs";
+import {
+  createWriteStream,
+  mkdirSync,
+  existsSync,
+  link,
+  fstat,
+  unlinkSync
+} from "fs";
 import { join, basename } from "path";
 import Axios from "axios";
 
@@ -27,6 +34,10 @@ export async function downloadImages(gallery: string, urls: string[]) {
         linkDone = true;
       } catch (error) {
         console.error("Error downloading url:", url);
+        try {
+          unlinkSync(path);
+        } catch (err) {}
+        console.error("Retrying url:", url);
       }
     }
   }

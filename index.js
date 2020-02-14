@@ -42,6 +42,7 @@ var download_1 = require("./download");
 var tubsexer_1 = require("./scrapers/tubsexer");
 var coedcherry_1 = require("./scrapers/coedcherry");
 var pornpics_1 = require("./scrapers/pornpics");
+var sweet_pornstars_1 = require("./scrapers/sweet-pornstars");
 var dry = false;
 function scrapeLink(url) {
     return __awaiter(this, void 0, void 0, function () {
@@ -55,44 +56,50 @@ function scrapeLink(url) {
                     return [4 /*yield*/, new pornstar_1.PornStarScraper().scrape(url)];
                 case 1:
                     result = _a.sent();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 2:
                     if (!url.includes("babesource.com")) return [3 /*break*/, 4];
                     return [4 /*yield*/, new babesource_1.BabesourceScraper().scrape(url)];
                 case 3:
                     result = _a.sent();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 4:
                     if (!url.includes("tubsexer.com")) return [3 /*break*/, 6];
                     return [4 /*yield*/, new tubsexer_1.TubsexerScraper().scrape(url)];
                 case 5:
                     result = _a.sent();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 6:
                     if (!url.includes("coedcherry.com")) return [3 /*break*/, 8];
                     return [4 /*yield*/, new coedcherry_1.CoedcherryScraper().scrape(url)];
                 case 7:
                     result = _a.sent();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 8:
                     if (!url.includes("pornpics.com")) return [3 /*break*/, 10];
                     return [4 /*yield*/, new pornpics_1.PornpicsScraper().scrape(url)];
                 case 9:
                     result = _a.sent();
-                    return [3 /*break*/, 11];
+                    return [3 /*break*/, 13];
                 case 10:
-                    console.error("Unsupported site: " + url);
-                    _a.label = 11;
+                    if (!url.includes("sweet-pornstars.com")) return [3 /*break*/, 12];
+                    return [4 /*yield*/, new sweet_pornstars_1.SweetPornstarsScraper().scrape(url)];
                 case 11:
-                    if (!result) return [3 /*break*/, 14];
-                    if (!dry) return [3 /*break*/, 12];
-                    console.log(result);
-                    return [3 /*break*/, 14];
-                case 12: return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
+                    result = _a.sent();
+                    return [3 /*break*/, 13];
+                case 12:
+                    console.error("Unsupported site: " + url);
+                    _a.label = 13;
                 case 13:
+                    if (!result) return [3 /*break*/, 16];
+                    if (!dry) return [3 /*break*/, 14];
+                    console.log(result);
+                    return [3 /*break*/, 16];
+                case 14: return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
+                case 15:
                     _a.sent();
-                    _a.label = 14;
-                case 14: return [2 /*return*/];
+                    _a.label = 16;
+                case 16: return [2 /*return*/];
             }
         });
     });
