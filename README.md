@@ -7,6 +7,8 @@
 - tubsexer.com
 - coedcherry.com
 - pornpics.com
+- sweet-pornstars.com
+- europornstar.com
 
 ### How to
 
