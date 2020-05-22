@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["ES2015.Promise"]
+    "lib": ["ES2015.Promise"],
+    "outDir": "dist",
+    "rootDir": "src"
   }
 }

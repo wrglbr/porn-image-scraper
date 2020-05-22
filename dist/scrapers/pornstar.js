@@ -45,7 +45,9 @@ var PornStarScraper = /** @class */ (function () {
             .map(function (el) {
             return el.getAttribute("src");
         })
-            .map(function (url) { return "https://porn-star.com/" + gallery + "/" + url.replace("thumbs/", ""); });
+            .map(function (url) {
+            return "https://porn-star.com/" + gallery + "/" + url.replace("thumbs/", "");
+        });
     };
     PornStarScraper.prototype.scrape = function (url) {
         return __awaiter(this, void 0, void 0, function () {

@@ -5,11 +5,12 @@ import { qsAll, createDomFromURL } from "../dom";
 export class PornStarScraper implements IScraper {
   getImageLinks(gallery: string, dom: JSDOM) {
     return Array.from(qsAll(dom, ".thumbnails-gallery img"))
-      .map(el => {
+      .map((el) => {
         return el.getAttribute("src");
       })
       .map(
-        url => `https://porn-star.com/${gallery}/${url.replace("thumbs/", "")}`
+        (url) =>
+          `https://porn-star.com/${gallery}/${url.replace("thumbs/", "")}`
       );
   }
 
@@ -22,7 +23,7 @@ export class PornStarScraper implements IScraper {
 
     return {
       gallery,
-      links
+      links,
     };
   }
 }

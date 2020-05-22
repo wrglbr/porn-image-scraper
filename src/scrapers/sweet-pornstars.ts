@@ -5,10 +5,10 @@ import { qsAll, createDomFromURL } from "../dom";
 export class SweetPornstarsScraper implements IScraper {
   getImageLinks(gallery: string, dom: JSDOM) {
     return Array.from(qsAll(dom, ".gallery .card-image a"))
-      .map(el => {
+      .map((el) => {
         return el.getAttribute("href");
       })
-      .map(url => `https://sweet-pornstars.com${url}`);
+      .map((url) => `https://sweet-pornstars.com${url}`);
   }
 
   async scrape(url: string) {
@@ -20,7 +20,7 @@ export class SweetPornstarsScraper implements IScraper {
 
     return {
       gallery,
-      links
+      links,
     };
   }
 }

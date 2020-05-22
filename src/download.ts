@@ -1,11 +1,4 @@
-import {
-  createWriteStream,
-  mkdirSync,
-  existsSync,
-  link,
-  fstat,
-  unlinkSync
-} from "fs";
+import { createWriteStream, mkdirSync, existsSync, unlinkSync } from "fs";
 import { join, basename } from "path";
 import Axios from "axios";
 
@@ -54,7 +47,7 @@ export async function downloadImage(url: string, path: string) {
   const response = await Axios({
     url,
     method: "GET",
-    responseType: "stream"
+    responseType: "stream",
   });
 
   console.log(`\tDownloading ${url}...`);

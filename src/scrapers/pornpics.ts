@@ -2,9 +2,9 @@ import { IScraper } from "./index";
 import { JSDOM } from "jsdom";
 import { qsAll, createDomFromURL } from "../dom";
 
-export class CoedcherryScraper implements IScraper {
+export class PornpicsScraper implements IScraper {
   getImageLinks(dom: JSDOM) {
-    return Array.from(qsAll(dom, "figure a")).map(el => {
+    return Array.from(qsAll(dom, "#tiles .rel-link")).map((el) => {
       return el.getAttribute("href");
     });
   }
@@ -18,7 +18,7 @@ export class CoedcherryScraper implements IScraper {
 
     return {
       gallery,
-      links
+      links,
     };
   }
 }
