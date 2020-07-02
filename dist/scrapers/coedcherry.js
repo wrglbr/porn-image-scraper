@@ -39,6 +39,7 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var CoedcherryScraper = /** @class */ (function () {
     function CoedcherryScraper() {
+        this.domain = "coedcherry.com";
     }
     CoedcherryScraper.prototype.getImageLinks = function (dom) {
         return Array.from(dom_1.qsAll(dom, "figure a")).map(function (el) {

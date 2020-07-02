@@ -39,6 +39,7 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var TubsexerScraper = /** @class */ (function () {
     function TubsexerScraper() {
+        this.domain = "tubsexer.com";
     }
     TubsexerScraper.prototype.getImageLinks = function (dom) {
         return Array.from(dom_1.qsAll(dom, ".images a")).map(function (el) {

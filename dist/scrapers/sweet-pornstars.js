@@ -39,6 +39,7 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var SweetPornstarsScraper = /** @class */ (function () {
     function SweetPornstarsScraper() {
+        this.domain = "sweet-pornstars.com";
     }
     SweetPornstarsScraper.prototype.getImageLinks = function (gallery, dom) {
         return Array.from(dom_1.qsAll(dom, ".gallery .card-image a"))

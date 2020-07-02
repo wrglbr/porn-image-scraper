@@ -1,6 +1,7 @@
 import { createWriteStream, mkdirSync, existsSync, unlinkSync } from "fs";
 import { join, basename } from "path";
 import Axios from "axios";
+import { SingleBar, Presets } from "cli-progress";
 
 const baseFolder = "images";
 if (!existsSync(baseFolder)) mkdirSync(baseFolder);
@@ -23,7 +24,7 @@ export async function downloadImages(gallery: string, urls: string[]) {
     let linkDone = false;
     while (!linkDone) {
       try {
-        await downloadImage(url, path);
+        await downloadFile(url, path);
         linkDone = true;
       } catch (error) {
         console.error("Error downloading url:", url);
@@ -36,26 +37,40 @@ export async function downloadImages(gallery: string, urls: string[]) {
   }
 }
 
-export async function downloadImage(url: string, path: string) {
-  if (existsSync(path)) {
+export async function downloadFile(url: string, file: string) {
+  if (existsSync(file)) {
     console.warn(`\t${url} already exists, skipping...`);
     return;
   }
 
-  const writer = createWriteStream(path);
+  console.error(`\tDownloading ${url} to ${file}...`);
+
+  const downloadBar = new SingleBar({}, Presets.legacy);
+  downloadBar.start(100, 0);
 
   const response = await Axios({
-    url,
+    url: url,
     method: "GET",
     responseType: "stream",
   });
 
-  console.log(`\tDownloading ${url}...`);
+  const writer = createWriteStream(file);
+
+  const totalSize = response.headers["content-length"];
+  let loaded = 0;
+
+  response.data.on("data", (data: Buffer) => {
+    loaded += Buffer.byteLength(data);
+    const percent = ((loaded / totalSize) * 100).toFixed(0);
+    downloadBar.update(+percent);
+  });
 
   response.data.pipe(writer);
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     writer.on("finish", resolve);
     writer.on("error", reject);
   });
+
+  downloadBar.stop();
 }

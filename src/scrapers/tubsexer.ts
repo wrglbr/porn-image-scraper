@@ -3,6 +3,8 @@ import { JSDOM } from "jsdom";
 import { qsAll, createDomFromURL } from "../dom";
 
 export class TubsexerScraper implements IScraper {
+  domain = "tubsexer.com";
+
   getImageLinks(dom: JSDOM) {
     return Array.from(qsAll(dom, ".images a")).map((el) => {
       return el.getAttribute("href");

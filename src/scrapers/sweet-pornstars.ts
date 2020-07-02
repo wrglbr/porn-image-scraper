@@ -3,6 +3,8 @@ import { JSDOM } from "jsdom";
 import { qsAll, createDomFromURL } from "../dom";
 
 export class SweetPornstarsScraper implements IScraper {
+  domain = "sweet-pornstars.com";
+
   getImageLinks(gallery: string, dom: JSDOM) {
     return Array.from(qsAll(dom, ".gallery .card-image a"))
       .map((el) => {

@@ -39,9 +39,10 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var BabesourceScraper = /** @class */ (function () {
     function BabesourceScraper() {
+        this.domain = "babesource.com";
     }
     BabesourceScraper.prototype.getImageLinks = function (dom) {
-        return Array.from(dom_1.qsAll(dom, ".thumbs.cf a")).map(function (el) {
+        return Array.from(dom_1.qsAll(dom, ".thumbs.cf a:not(#startSlideshowAnchor)")).map(function (el) {
             return el.getAttribute("href");
         });
     };

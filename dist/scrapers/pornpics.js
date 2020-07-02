@@ -39,6 +39,7 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var PornpicsScraper = /** @class */ (function () {
     function PornpicsScraper() {
+        this.domain = "pornpics.com";
     }
     PornpicsScraper.prototype.getImageLinks = function (dom) {
         return Array.from(dom_1.qsAll(dom, "#tiles .rel-link")).map(function (el) {

@@ -3,8 +3,12 @@ import { qsAll, createDomFromURL } from "../dom";
 import { JSDOM } from "jsdom";
 
 export class BabesourceScraper implements IScraper {
+  domain = "babesource.com";
+
   getImageLinks(dom: JSDOM) {
-    return Array.from(qsAll(dom, ".thumbs.cf a")).map((el) => {
+    return Array.from(
+      qsAll(dom, ".thumbs.cf a:not(#startSlideshowAnchor)")
+    ).map((el) => {
       return el.getAttribute("href");
     });
   }

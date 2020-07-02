@@ -39,6 +39,7 @@ exports.__esModule = true;
 var fs_1 = require("fs");
 var path_1 = require("path");
 var axios_1 = require("axios");
+var cli_progress_1 = require("cli-progress");
 var baseFolder = "images";
 if (!fs_1.existsSync(baseFolder))
     fs_1.mkdirSync(baseFolder);
@@ -71,7 +72,7 @@ function downloadImages(gallery, urls) {
                     _a.label = 3;
                 case 3:
                     _a.trys.push([3, 5, , 6]);
-                    return [4 /*yield*/, downloadImage(url, path)];
+                    return [4 /*yield*/, downloadFile(url, path)];
                 case 4:
                     _a.sent();
                     linkDone = true;
@@ -95,17 +96,19 @@ function downloadImages(gallery, urls) {
     });
 }
 exports.downloadImages = downloadImages;
-function downloadImage(url, path) {
+function downloadFile(url, file) {
     return __awaiter(this, void 0, void 0, function () {
-        var writer, response;
+        var downloadBar, response, writer, totalSize, loaded;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (fs_1.existsSync(path)) {
+                    if (fs_1.existsSync(file)) {
                         console.warn("\t" + url + " already exists, skipping...");
                         return [2 /*return*/];
                     }
-                    writer = fs_1.createWriteStream(path);
+                    console.error("\tDownloading " + url + "...");
+                    downloadBar = new cli_progress_1.SingleBar({}, cli_progress_1.Presets.shades_classic);
+                    downloadBar.start(100, 0);
                     return [4 /*yield*/, axios_1["default"]({
                             url: url,
                             method: "GET",
@@ -113,14 +116,25 @@ function downloadImage(url, path) {
                         })];
                 case 1:
                     response = _a.sent();
-                    console.log("\tDownloading " + url + "...");
+                    writer = fs_1.createWriteStream(file);
+                    totalSize = response.headers["content-length"];
+                    loaded = 0;
+                    response.data.on("data", function (data) {
+                        loaded += Buffer.byteLength(data);
+                        var percent = ((loaded / totalSize) * 100).toFixed(0);
+                        downloadBar.update(+percent);
+                    });
                     response.data.pipe(writer);
-                    return [2 /*return*/, new Promise(function (resolve, reject) {
+                    return [4 /*yield*/, new Promise(function (resolve, reject) {
                             writer.on("finish", resolve);
                             writer.on("error", reject);
                         })];
+                case 2:
+                    _a.sent();
+                    downloadBar.stop();
+                    return [2 /*return*/];
             }
         });
     });
 }
-exports.downloadImage = downloadImage;
+exports.downloadFile = downloadFile;

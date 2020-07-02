@@ -39,6 +39,7 @@ exports.__esModule = true;
 var dom_1 = require("../dom");
 var EuropornstarScraper = /** @class */ (function () {
     function EuropornstarScraper() {
+        this.domain = "europornstar.com";
     }
     EuropornstarScraper.prototype.getImageLinks = function (dom, url) {
         return Array.from(dom_1.qsAll(dom, ".thumbs .th a")).map(function (el) {
