@@ -1,10 +1,13 @@
 import { createWriteStream, mkdirSync, existsSync, unlinkSync } from "fs";
-import { join, basename } from "path";
+import { join, basename, resolve } from "path";
 import Axios from "axios";
 import { SingleBar, Presets } from "cli-progress";
+import argv from "./args";
 
-const baseFolder = "images";
-if (!existsSync(baseFolder)) mkdirSync(baseFolder);
+const baseFolder = resolve(argv.folder);
+if (!existsSync(baseFolder)) {
+  mkdirSync(baseFolder);
+}
 
 export async function downloadImages(gallery: string, urls: string[]) {
   const galleryFolder = join(baseFolder, gallery);

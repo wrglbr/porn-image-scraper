@@ -44,48 +44,92 @@ var coedcherry_1 = require("./coedcherry");
 var pornpics_1 = require("./pornpics");
 var sweet_pornstars_1 = require("./sweet-pornstars");
 var europornstar_1 = require("./europornstar");
-exports.dryMode = false;
-function setDryMode(val) {
-    console.error("Dry mode ON");
-    exports.dryMode = val;
-}
-exports.setDryMode = setDryMode;
+var scrapers = [
+    new babesource_1.BabesourceScraper(),
+    new pornstar_1.PornStarScraper(),
+    new tubsexer_1.TubsexerScraper(),
+    new coedcherry_1.CoedcherryScraper(),
+    new pornpics_1.PornpicsScraper(),
+    new sweet_pornstars_1.SweetPornstarsScraper(),
+    new europornstar_1.EuropornstarScraper(),
+];
 function scrapeLink(url) {
     return __awaiter(this, void 0, void 0, function () {
-        var scrapers, scraper, result;
+        var scraper, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     console.error("Getting " + url + "...");
-                    scrapers = [
-                        new babesource_1.BabesourceScraper(),
-                        new pornstar_1.PornStarScraper(),
-                        new tubsexer_1.TubsexerScraper(),
-                        new coedcherry_1.CoedcherryScraper(),
-                        new pornpics_1.PornpicsScraper(),
-                        new sweet_pornstars_1.SweetPornstarsScraper(),
-                        new europornstar_1.EuropornstarScraper(),
-                    ];
                     scraper = scrapers.find(function (t) { return url.includes(t.domain); });
-                    if (!scraper) return [3 /*break*/, 5];
+                    if (!scraper) return [3 /*break*/, 3];
                     return [4 /*yield*/, scraper.scrape(url)];
                 case 1:
                     result = _a.sent();
-                    if (!exports.dryMode) return [3 /*break*/, 2];
-                    console.log(result);
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
-                case 3:
+                    return [4 /*yield*/, download_1.downloadImages(result.gallery, result.links.filter(Boolean))];
+                case 2:
                     _a.sent();
-                    _a.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
+                    return [3 /*break*/, 4];
+                case 3:
                     console.error("Unsupported site: " + url);
                     process.exit(1);
-                    _a.label = 6;
-                case 6: return [2 /*return*/];
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
 exports.scrapeLink = scrapeLink;
+function dryRun(urls) {
+    return __awaiter(this, void 0, void 0, function () {
+        var result, _loop_1, _i, urls_1, url;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.error("Dry run...");
+                    result = {};
+                    _loop_1 = function (url) {
+                        var scraper, scraperResult, error_1;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    scraper = scrapers.find(function (t) { return url.includes(t.domain); });
+                                    if (!scraper) return [3 /*break*/, 5];
+                                    _a.label = 1;
+                                case 1:
+                                    _a.trys.push([1, 3, , 4]);
+                                    return [4 /*yield*/, scraper.scrape(url)];
+                                case 2:
+                                    scraperResult = _a.sent();
+                                    result[url] = scraperResult;
+                                    return [3 /*break*/, 4];
+                                case 3:
+                                    error_1 = _a.sent();
+                                    console.error(error_1.message);
+                                    return [3 /*break*/, 4];
+                                case 4: return [3 /*break*/, 6];
+                                case 5:
+                                    console.error("Unsupported site: " + url);
+                                    process.exit(1);
+                                    _a.label = 6;
+                                case 6: return [2 /*return*/];
+                            }
+                        });
+                    };
+                    _i = 0, urls_1 = urls;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < urls_1.length)) return [3 /*break*/, 4];
+                    url = urls_1[_i];
+                    return [5 /*yield**/, _loop_1(url)];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/, result];
+            }
+        });
+    });
+}
+exports.dryRun = dryRun;

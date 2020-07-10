@@ -40,9 +40,11 @@ var fs_1 = require("fs");
 var path_1 = require("path");
 var axios_1 = require("axios");
 var cli_progress_1 = require("cli-progress");
-var baseFolder = "images";
-if (!fs_1.existsSync(baseFolder))
+var args_1 = require("./args");
+var baseFolder = path_1.resolve(args_1["default"].folder);
+if (!fs_1.existsSync(baseFolder)) {
     fs_1.mkdirSync(baseFolder);
+}
 function downloadImages(gallery, urls) {
     return __awaiter(this, void 0, void 0, function () {
         var galleryFolder, _i, urls_1, url, path, linkDone, error_1;
@@ -106,8 +108,8 @@ function downloadFile(url, file) {
                         console.warn("\t" + url + " already exists, skipping...");
                         return [2 /*return*/];
                     }
-                    console.error("\tDownloading " + url + "...");
-                    downloadBar = new cli_progress_1.SingleBar({}, cli_progress_1.Presets.shades_classic);
+                    console.error("\tDownloading " + url + " to " + file + "...");
+                    downloadBar = new cli_progress_1.SingleBar({}, cli_progress_1.Presets.legacy);
                     downloadBar.start(100, 0);
                     return [4 /*yield*/, axios_1["default"]({
                             url: url,

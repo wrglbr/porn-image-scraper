@@ -1,4 +1,4 @@
-import { IScraper } from "./index";
+import { IScraper } from "./interface";
 import { JSDOM } from "jsdom";
 import { qsAll, createDomFromURL } from "../dom";
 

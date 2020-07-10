@@ -37,34 +37,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var scrapers_1 = require("./scrapers");
+var args_1 = require("./args");
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var urls, _i, urls_1, url;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var urls, _a, _b, _i, urls_1, url;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                urls = process.argv.slice(2);
+                urls = args_1["default"]._;
                 if (!urls.length) {
                     console.error("(ts-)node . url0 url1 ...");
+                    console.error("Run with --help for details");
                     process.exit(1);
                 }
-                if (urls.some(function (url) { return url === "--dry"; })) {
-                    scrapers_1.setDryMode(true);
-                    urls = urls.filter(function (url) { return url !== "--dry"; });
-                }
-                _i = 0, urls_1 = urls;
-                _a.label = 1;
+                if (!args_1["default"].dry) return [3 /*break*/, 2];
+                _b = (_a = console).log;
+                return [4 /*yield*/, scrapers_1.dryRun(urls)];
             case 1:
-                if (!(_i < urls_1.length)) return [3 /*break*/, 4];
+                _b.apply(_a, [_c.sent()]);
+                return [3 /*break*/, 6];
+            case 2:
+                _i = 0, urls_1 = urls;
+                _c.label = 3;
+            case 3:
+                if (!(_i < urls_1.length)) return [3 /*break*/, 6];
                 url = urls_1[_i];
                 return [4 /*yield*/, scrapers_1.scrapeLink(url)];
-            case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3:
-                _i++;
-                return [3 /*break*/, 1];
             case 4:
-                process.exit(0);
+                _c.sent();
+                _c.label = 5;
+            case 5:
+                _i++;
+                return [3 /*break*/, 3];
+            case 6:
+                process.exit();
                 return [2 /*return*/];
         }
     });
