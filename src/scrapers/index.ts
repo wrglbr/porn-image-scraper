@@ -1,5 +1,6 @@
 import { PornStarScraper } from "./pornstar";
 import { BabesourceScraper } from "./babesource";
+import { ImagefapScraper } from "./imagefap";
 import { downloadImages } from "../download";
 import { TubsexerScraper } from "./tubsexer";
 import { CoedcherryScraper } from "./coedcherry";
@@ -12,6 +13,7 @@ import { IScraperResult } from "./interface";
 const scrapers = [
   new BabesourceScraper(),
   new PornStarScraper(),
+  new ImagefapScraper(),
   new TubsexerScraper(),
   new CoedcherryScraper(),
   new PornpicsScraper(),
