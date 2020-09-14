@@ -1,6 +1,6 @@
 {
   "name": "porn-image-scraper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Download entire porn image galleries",
   "main": "index.js",
   "scripts": {
