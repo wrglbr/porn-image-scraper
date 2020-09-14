@@ -42,6 +42,7 @@ var download_1 = require("../download");
 var tubsexer_1 = require("./tubsexer");
 var coedcherry_1 = require("./coedcherry");
 var pornpics_1 = require("./pornpics");
+var imagefap_1 = require("./imagefap");
 var sweet_pornstars_1 = require("./sweet-pornstars");
 var europornstar_1 = require("./europornstar");
 var scrapers = [
@@ -50,6 +51,7 @@ var scrapers = [
     new tubsexer_1.TubsexerScraper(),
     new coedcherry_1.CoedcherryScraper(),
     new pornpics_1.PornpicsScraper(),
+    new imagefap_1.ImagefapScraper(),
     new sweet_pornstars_1.SweetPornstarsScraper(),
     new europornstar_1.EuropornstarScraper(),
 ];
